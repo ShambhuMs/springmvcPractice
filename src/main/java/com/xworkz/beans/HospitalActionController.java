@@ -1,7 +1,10 @@
 package com.xworkz.beans;
 
 import com.xworkz.dto.HospitalDTO;
+import com.xworkz.model.service.interfaces.HospitalService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
-@Component
+@Controller
 @RequestMapping("/")
-public class HospitalAction {
-    public HospitalAction() {
+public class HospitalActionController {
+    @Autowired
+    private HospitalService hospitalService;
+    public HospitalActionController() {
         System.out.println("created HospitalAction....");
     }
 
@@ -26,6 +31,8 @@ public class HospitalAction {
             return "HospitalAppointment";
         }else {
             model.addAttribute("msg",hospitalDTO.getName()+", Your application submitted....");
+            boolean result=this.hospitalService.saveData(hospitalDTO);
+            System.out.println("Value from HospitalActionController.. "+result);
             return "success";
         }
     }

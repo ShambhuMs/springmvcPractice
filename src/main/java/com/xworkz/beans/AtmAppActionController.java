@@ -1,8 +1,9 @@
 package com.xworkz.beans;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.xworkz.dto.AtmDTO;
-import org.springframework.stereotype.Component;
+import com.xworkz.model.service.interfaces.AtmApplicationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
-@Component
+@Controller
 @RequestMapping("/")
-public class AtmAppAction {
-    public AtmAppAction() {
+public class AtmAppActionController {
+   @Autowired
+   private AtmApplicationService atmApplicationService;
+    public AtmAppActionController() {
         System.out.println("Created AtmAppAction....");
     }
     @PostMapping("/atm")
@@ -26,6 +29,8 @@ public class AtmAppAction {
             return "AtmApplication";
         }else {
             model.addAttribute("msg",atmDTO.getName()+", Your application submitted....");
+          boolean result=  this.atmApplicationService.validateAndSave(atmDTO);
+            System.out.println("result from AtmAppActionController");
             return "success";
         }
 

@@ -1,18 +1,22 @@
 package com.xworkz.beans;
 
-import com.xworkz.dto.AtmDTO;
 import com.xworkz.dto.LoanDTO;
+import com.xworkz.model.service.interfaces.LoanService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
-@Component
+@Controller
 @RequestMapping("/")
-public class LoanApplicationAction {
-    public LoanApplicationAction() {
+public class LoanApplicationActionController {
+    @Autowired
+    private LoanService loanService;
+    public LoanApplicationActionController() {
         System.out.println("Created LoanApplicationAction....");
     }
     @PostMapping("/loan")
@@ -25,6 +29,8 @@ public class LoanApplicationAction {
             return "LoanApplication";
         }else {
             model.addAttribute("msg",loanDTO.getName()+", Your application submitted....");
+            boolean result=this.loanService.saveData(loanDTO);
+            System.out.println("Value from LoanApplicationActionController.. "+result);
             return "success";
         }
 

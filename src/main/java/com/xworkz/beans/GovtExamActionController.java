@@ -1,8 +1,10 @@
 package com.xworkz.beans;
 
 import com.xworkz.dto.GovtExamDTO;
-import com.xworkz.dto.HallDTO;
+import com.xworkz.model.service.interfaces.GovtExamService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
-@Component
+@Controller
 @RequestMapping("/")
-public class GovtExamAction {
-    public GovtExamAction() {
+public class GovtExamActionController {
+   @Autowired
+   private GovtExamService govtExamService;
+    public GovtExamActionController() {
         System.out.println("created GovtExamAction......");
     }
     @PostMapping("/gvt")
@@ -26,6 +30,8 @@ public class GovtExamAction {
             return "GovtExam";
         } else {
             model.addAttribute("msg", govtExamDTO.getName() + ", Your application submitted successfully....");
+            boolean value=this.govtExamService.saveData(govtExamDTO);
+            System.out.println("Value from GovtExamActionController.."+value);
             return "success";
         }
     }

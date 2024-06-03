@@ -1,7 +1,10 @@
 package com.xworkz.beans;
 
 import com.xworkz.dto.TrainDTO;
+import com.xworkz.model.service.interfaces.TrainService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
-@Component
+@Controller
 @RequestMapping("/")
-public class TrainTicketAction {
-    public TrainTicketAction() {
+public class TrainTicketActionController {
+    @Autowired
+    private TrainService trainService;
+    public TrainTicketActionController() {
         System.out.println("Created TrainTicketAction....");
     }
 
@@ -26,6 +31,8 @@ public class TrainTicketAction {
             return "TrainTicket";
         }else {
             model.addAttribute("msg",trainDTO.getName()+", Your ticket booked...");
+            boolean result=this.trainService.saveData(trainDTO);
+            System.out.println("Value from TrainTicketActionController.. "+result);
             return "success";
         }
 

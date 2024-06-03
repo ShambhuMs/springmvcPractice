@@ -1,7 +1,10 @@
 package com.xworkz.beans;
 
 import com.xworkz.dto.RoomDTO;
+import com.xworkz.model.service.interfaces.RoomService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
-@Component
+@Controller
 @RequestMapping("/")
-public class RoomAction {
-    public RoomAction() {
+public class RoomActionController {
+    @Autowired
+    private RoomService roomService;
+    public RoomActionController() {
         System.out.println("Created no-arg const in RoomAction...");
     }
     @PostMapping("/room")
@@ -27,6 +32,8 @@ public class RoomAction {
         model.addAttribute("validData",roomDTO.getName()+","+"Thank you for booking....");
         model.addAttribute("data","Your details : "+roomDTO);
         System.out.println("Entered valid data...");
+        boolean result=this.roomService.saveData(roomDTO);
+        System.out.println("Value from RoomActionController.. "+result);
         return "success";
     }
 
